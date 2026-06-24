@@ -1,0 +1,9 @@
+{
+  "id": "git-sync",
+  "name": "Git Sync",
+  "version": "0.1.0",
+  "icon": "⎇",
+  "panel": "panel.html",
+  "author": "Lucas Catanio",
+  "description": "Visual git client for your vault — stage, commit, push, pull and more."
+}

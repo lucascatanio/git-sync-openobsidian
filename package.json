@@ -1,0 +1,32 @@
+{
+  "name": "openobsidian-git-sync",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite build --watch",
+    "build": "vite build",
+    "postbuild": "node build/strip-module-type.mjs",
+    "test": "vitest run",
+    "lint": "eslint src",
+    "format": "prettier --write src",
+    "package": "npm run build && zip -j dist/git-sync.zip dist/panel.html manifest.json"
+  },
+  "dependencies": {
+    "preact": "^10.24.0"
+  },
+  "devDependencies": {
+    "@preact/preset-vite": "^2.8.1",
+    "eslint": "^9.0.0",
+    "eslint-config-prettier": "^9.1.0",
+    "prettier": "^3.3.3",
+    "typescript": "^5.6.3",
+    "typescript-eslint": "^8.10.0",
+    "vite": "^5.4.10",
+    "vite-plugin-singlefile": "^2.0.2",
+    "vitest": "^2.1.4"
+  },
+  "allowScripts": {
+    "esbuild@0.21.5": true
+  }
+}
