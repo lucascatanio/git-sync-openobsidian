@@ -409,6 +409,12 @@ explicação); auth falhou; conflito após pull; "nada a commitar"; remote
 inacessível/offline (cai em `command-failed` com stderr). Cada um mapeia para um
 `GitError.kind` (seção 7) e a UI decide a mensagem/ação.
 
+**Locale:** a ponte não permite injetar variáveis de ambiente (sem `LC_ALL=C`),
+então `classifyGitError` assume git em inglês e é best-effort. Detecção de
+conflito após pull usa `git status --porcelain=v2` como sinal primário
+(entradas 'u' são locale-independentes); stderr fica como fallback. Ver
+LESSONS.md § "Locale do git".
+
 ## 16. Build e empacotamento
 
 - TS + Preact compilados e **inlinados** num único `dist/panel.html` (ADR-0002).

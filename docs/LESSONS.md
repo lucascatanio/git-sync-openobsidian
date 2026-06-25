@@ -62,6 +62,28 @@ Aprendizados acumulados durante o desenvolvimento.
   **código atual do master**, não só contra o AppImage publicado (que pode estar
   atrás do fonte).
 
+## Locale do git e classificação de erros
+
+A ponte `exec` **não aceita variáveis de ambiente** (`execFileAsync` só recebe
+`{ cwd, timeout }` — ver `plugin-manager.ts:execPlugin`). Isso impede forçar
+`LC_ALL=C` a partir do plugin, então o git pode responder em qualquer locale do
+sistema do usuário.
+
+Consequências e mitigações adotadas:
+
+- **`classifyGitError`** opera sobre strings de stderr em inglês (ex.: "not a
+  git repository", "Authentication failed"). É **best-effort**: funciona para a
+  maioria dos usuários (git em inglês por padrão), mas pode cair em
+  `command-failed` para outros.
+- **Conflito após pull**: sinal mais confiável é via `git status --porcelain=v2`
+  (entradas 'u' = unmerged). `GitService.pull()` executa o status após falha do
+  pull e detecta conflitos por porcelain antes de tentar classificar o stderr. As
+  strings "CONFLICT"/"Automatic merge failed" ficam como fallback secundário
+  dentro de `classifyGitError`, mas o caminho primário não depende de locale.
+- **Migração futura**: se a ponte ganhar suporte a `env`, passar `LC_ALL=C` no
+  `exec` de git elimina a dependência de locale para todos os casos. O lugar
+  certo é `bridge.ts` (único ponto que toca `window.pluginApi`).
+
 ## Contrato da ponte (confirmado em runtime, bate com a SPEC §5)
 
 - `exec(cmd,args,cwd) → Promise<{stdout,stderr,code} | {error}>`
